@@ -1,0 +1,16 @@
+setwd("exdata%2Fdata%2FNEI_data")
+library(ggplot2)
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+bmore <- aggregate(vhcl[c("Emissions")], list(type=vhcl$type, 
+         year=vhcl$year, fill=vhcl$fips), sum)
+LA <- subset(NEI, fips == "06037" & type=="ON-ROAD")
+LA_vhcl <- aggregate(LA[c("Emissions")], list(type=LA$type, 
+            year=LA$year, fill=LA$fips), sum)
+bmore_LA_vhcl <- rbind(bmore, LA_vhcl)
+png("plot6.png", width=480, height=480, units="px")
+Plot_6 <- qplot(year, Emissions, data=bmore_LA_vhcl, color=fill, geom= "line", ylim=c(-100, 5500)) 
+          +ggtitle("Vehicle Emissions for Baltimore & L.A. Counties") 
+          +xlab("Year") +ylab("Emission Levels")
+print(Plot_6)
+dev.off()

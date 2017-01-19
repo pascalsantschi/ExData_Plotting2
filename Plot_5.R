@@ -1,0 +1,13 @@
+setwd("exdata%2Fdata%2FNEI_data")
+library(ggplot2)
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+vhcl <- subset(NEI, fips=="24510" & type=="ON-ROAD")
+bmore <- aggregate(vhcl[c("Emissions")], list(type=vhcl$type, 
+         year=vhcl$year, zip=vhcl$fips), sum)
+png("plot5.png",width=480, height=480, units="px")
+Plot_5 <- qplot(year, Emissions, data=bmore, geom="line") +theme_dark() 
+            +ggtitle("Motor Vehicle Emissions Entire Baltimore County 1999-2008") 
+            +xlab("Year") +ylab("Emission Levels")
+print(Plot_5)
+dev.off()
